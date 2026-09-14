@@ -94,7 +94,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 var hydro = L.tileLayer.wms('%s', {
-  layers: '10', format: 'image/png', transparent: true,
+  layers: '4', format: 'image/png', transparent: true,
   version: '1.3.0', attribution: 'GRHQ / MRNF', opacity: 0.75
 });
 
