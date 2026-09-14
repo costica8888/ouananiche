@@ -40,3 +40,14 @@ Attention aux homonymes (3 « Saint-Jean », 2 « Malbaie ») : grouper par
 riviere + zone, jamais par riviere seul.
 
 Source : https://bibliotheque.cecile-rouleau.gouv.qc.ca/documents/archives/pgq/L6G48_B54/L6G48_B54_2025.pdf
+
+## Ordre d'exécution
+
+`fiches.py` recrée la base de zéro à chaque fois. Si tu la régénères,
+roule `autres.py` après, sinon la table `autre_riviere` (4 rivières
+sans fiche, zones Q7/Q8/Q9) est perdue.
+
+    python fiches.py && python autres.py
+
+Total : 114 rivières à saumon désignées — 110 avec série historique
+1984-2025, 4 avec seuils seulement.
