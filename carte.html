@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OUANANICHE - rivieres a saumon du Quebec</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  html,body{margin:0;height:100%;font-family:system-ui,-apple-system,sans-serif}
+  #map{height:100%}
+  .legende{background:#fff;padding:9px 11px;border-radius:5px;
+           box-shadow:0 1px 6px rgba(0,0,0,.35);font-size:12px;line-height:1.7}
+  .legende b{display:block;margin-bottom:5px;font-size:13px}
+  .pastille{display:inline-block;width:11px;height:11px;border-radius:50%;
+            margin-right:7px;border:1px solid #333;vertical-align:-1px}
+  .popup h3{margin:0 0 6px;font-size:14px}
+  .popup table{border-collapse:collapse;font-size:12px}
+  .popup td{padding:1px 9px 1px 0}
+  .popup td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+var RIV = [{"riviere": "Petite rivière Cascapédia", "zone": "Q1", "lat": 48.1905277778, "lon": -65.8113888889, "seuil_optimal": 3.076, "oeufs_millions": 1.15, "mont_total": 207.0, "repro_total": 206.0, "jours_peche": 2074.0, "pct": 37.4, "pct5": 65.0}, {"riviere": "rivière Betsiamites", "zone": "Q7", "lat": 49.1828143002, "lon": -69.2457704638, "seuil_optimal": 5.101, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Bonaventure", "zone": "Q1", "lat": 48.1000238888, "lon": -65.4609027022, "seuil_optimal": 3.935, "oeufs_millions": 2.49, "mont_total": 1015.0, "repro_total": 1012.0, "jours_peche": 6730.0, "pct": 63.3, "pct5": 170.6}, {"riviere": "rivière Cap-Chat", "zone": "Q3", "lat": 49.0556666667, "lon": -66.6691666667, "seuil_optimal": 1.187, "oeufs_millions": 0.29, "mont_total": 132.0, "repro_total": 132.0, "jours_peche": 933.0, "pct": 24.4, "pct5": 77.3}, {"riviere": "rivière Cascapédia", "zone": "Q1", "lat": 48.6664156416, "lon": -66.188701553, "seuil_optimal": 7.164, "oeufs_millions": 7.1, "mont_total": 1100.0, "repro_total": 1068.0, "jours_peche": 6005.0, "pct": 99.1, "pct5": 258.1}, {"riviere": "rivière Coxipi", "zone": "Q9", "lat": 51.5022258819, "lon": -58.395042162, "seuil_optimal": 1.629, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Dartmouth", "zone": "Q2", "lat": 48.9330555556, "lon": -64.6355555556, "seuil_optimal": 1.872, "oeufs_millions": 0.74, "mont_total": 473.0, "repro_total": 473.0, "jours_peche": 754.0, "pct": 39.5, "pct5": 137.0}, {"riviere": "rivière George", "zone": "Q11", "lat": 56.783, "lon": -64.86811, "seuil_optimal": null, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 1281.0, "pct": null, "pct5": null}, {"riviere": "rivière Godbout", "zone": "Q7", "lat": 49.33075, "lon": -67.6545833333, "seuil_optimal": 5.6, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 163.0, "pct": null, "pct5": null}, {"riviere": "rivière Grande Rivière", "zone": "Q2", "lat": 48.4777777778, "lon": -64.5286111111, "seuil_optimal": 0.997, "oeufs_millions": 0.78, "mont_total": 267.0, "repro_total": 266.0, "jours_peche": 893.0, "pct": 78.2, "pct5": 194.2}, {"riviere": "rivière Jacques-Cartier", "zone": "Q5", "lat": 46.8925, "lon": -71.5261111111, "seuil_optimal": 5.068, "oeufs_millions": 0.27, "mont_total": 193.0, "repro_total": 189.0, "jours_peche": null, "pct": 5.3, "pct5": 18.0}, {"riviere": "rivière Jupiter", "zone": "Q10", "lat": 49.618916722, "lon": -63.4391459781, "seuil_optimal": 1.399, "oeufs_millions": 0.96, "mont_total": 1264.0, "repro_total": 1225.0, "jours_peche": 486.0, "pct": 68.6, "pct5": 59.2}, {"riviere": "rivière Madeleine", "zone": "Q3", "lat": 49.2028055818, "lon": -65.2947801041, "seuil_optimal": 2.18, "oeufs_millions": 0.44, "mont_total": 387.0, "repro_total": 374.0, "jours_peche": 996.0, "pct": 20.2, "pct5": 146.9}, {"riviere": "rivière Magpie", "zone": "Q8", "lat": 50.3242080471, "lon": -64.4533520596, "seuil_optimal": null, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Malbaie", "zone": "Q2", "lat": 47.6941666667, "lon": -70.2176388889, "seuil_optimal": 0.348, "oeufs_millions": 0.01, "mont_total": 8.0, "repro_total": 8.0, "jours_peche": 0.0, "pct": 2.9, "pct5": 74.7}, {"riviere": "rivière Malbaie", "zone": "Q5", "lat": 47.6941666667, "lon": -70.2176388889, "seuil_optimal": 2.896, "oeufs_millions": 0.25, "mont_total": 235.0, "repro_total": 226.0, "jours_peche": 1014.0, "pct": 8.6, "pct5": 47.0}, {"riviere": "rivière Matane", "zone": "Q3", "lat": 48.7736666667, "lon": -67.5401944444, "seuil_optimal": 4.594, "oeufs_millions": 1.46, "mont_total": 1473.0, "repro_total": 1425.0, "jours_peche": 3674.0, "pct": 31.8, "pct5": 82.0}, {"riviere": "rivière Matapédia", "zone": "Q1", "lat": 48.5339174164, "lon": -67.5448717717, "seuil_optimal": 10.415, "oeufs_millions": 6.13, "mont_total": 1210.0, "repro_total": 1160.0, "jours_peche": 5454.0, "pct": 58.9, "pct5": 79.2}, {"riviere": "rivière Mitis", "zone": "Q3", "lat": 48.4616949476, "lon": -68.0187812499, "seuil_optimal": 3.029, "oeufs_millions": 1.84, "mont_total": 950.0, "repro_total": 917.0, "jours_peche": 1653.0, "pct": 60.7, "pct5": 114.4}, {"riviere": "rivière Moisie", "zone": "Q8", "lat": 50.3525, "lon": -66.1866666667, "seuil_optimal": 32.257, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 622.0, "pct": null, "pct5": null}, {"riviere": "rivière Natashquan", "zone": "Q8", "lat": 50.1916900177, "lon": -61.5921177877, "seuil_optimal": 68.33, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 887.0, "pct": null, "pct5": null}, {"riviere": "rivière Nouvelle", "zone": "Q1", "lat": 48.1572464001, "lon": -66.3487185374, "seuil_optimal": 2.806, "oeufs_millions": 0.17, "mont_total": 62.0, "repro_total": 62.0, "jours_peche": 879.0, "pct": 6.1, "pct5": 12.8}, {"riviere": "rivière Ouelle", "zone": "Q3", "lat": 47.4197496225, "lon": -69.9488627795, "seuil_optimal": 1.634, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Petit Saguenay", "zone": "Q6", "lat": 48.186144476, "lon": -70.0499665597, "seuil_optimal": 1.63, "oeufs_millions": 0.11, "mont_total": 55.0, "repro_total": 54.0, "jours_peche": 67.0, "pct": 6.7, "pct5": 7.5}, {"riviere": "rivière Rimouski", "zone": "Q3", "lat": 48.4125285854, "lon": -68.5549143926, "seuil_optimal": 1.445, "oeufs_millions": 0.66, "mont_total": 401.0, "repro_total": 388.0, "jours_peche": 584.0, "pct": 45.7, "pct5": 117.5}, {"riviere": "rivière Romaine", "zone": "Q8", "lat": 50.308087, "lon": -63.621966, "seuil_optimal": 6.428, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Saint-Augustin", "zone": "Q9", "lat": 51.612506937, "lon": -58.7014395109, "seuil_optimal": 6.987, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière Saint-Jean", "zone": "Q2", "lat": 48.7716914366, "lon": -64.5205895503, "seuil_optimal": 2.121, "oeufs_millions": 1.49, "mont_total": 685.0, "repro_total": 685.0, "jours_peche": 1525.0, "pct": 70.2, "pct5": 231.7}, {"riviere": "rivière Saint-Jean", "zone": "Q6", "lat": 48.7716914366, "lon": -64.5205895503, "seuil_optimal": 0.476, "oeufs_millions": 0.14, "mont_total": 34.0, "repro_total": 32.0, "jours_peche": 157.0, "pct": 29.4, "pct5": 55.5}, {"riviere": "rivière Saint-Jean", "zone": "Q8", "lat": 48.7716914366, "lon": -64.5205895503, "seuil_optimal": 11.685, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 273.0, "pct": null, "pct5": null}, {"riviere": "rivière Saint-Paul", "zone": "Q9", "lat": 51.7708333333, "lon": -57.6011111111, "seuil_optimal": 7.433, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 333.0, "pct": null, "pct5": null}, {"riviere": "rivière Sainte-Anne", "zone": "Q3", "lat": 48.9464155769, "lon": -66.1264761799, "seuil_optimal": 1.294, "oeufs_millions": 0.64, "mont_total": 385.0, "repro_total": 385.0, "jours_peche": 1665.0, "pct": 49.5, "pct5": 201.2}, {"riviere": "rivière Sainte-Marguerite Nord-Est", "zone": "Q6", "lat": 48.2680452168, "lon": -69.9083294036, "seuil_optimal": 1.914, "oeufs_millions": 0.1, "mont_total": 46.0, "repro_total": 39.0, "jours_peche": 217.0, "pct": 5.2, "pct5": 28.0}, {"riviere": "rivière York", "zone": "Q2", "lat": 48.8341388889, "lon": -64.6280555556, "seuil_optimal": 3.514, "oeufs_millions": 1.48, "mont_total": 676.0, "repro_total": 670.0, "jours_peche": 3018.0, "pct": 42.1, "pct5": 148.5}, {"riviere": "rivière aux Anglais", "zone": "Q7", "lat": 49.3227777778, "lon": -68.1571944444, "seuil_optimal": 0.103, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": null, "pct": null, "pct5": null}, {"riviere": "rivière aux Feuilles", "zone": "Q11", "lat": 58.2777777778, "lon": -71.3116666667, "seuil_optimal": null, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 315.0, "pct": null, "pct5": null}, {"riviere": "rivière des Escoumins", "zone": "Q7", "lat": 48.3386417038, "lon": -69.4374482719, "seuil_optimal": 2.503, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 380.0, "pct": null, "pct5": null}, {"riviere": "rivière du Gouffre", "zone": "Q5", "lat": 47.4475313329, "lon": -70.509996023, "seuil_optimal": 1.938, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 920.0, "pct": null, "pct5": 51.6}, {"riviere": "rivière À Mars", "zone": "Q6", "lat": 48.3281470469, "lon": -70.907213237, "seuil_optimal": 1.338, "oeufs_millions": 0.19, "mont_total": 117.0, "repro_total": 116.0, "jours_peche": 348.0, "pct": 14.2, "pct5": 54.7}, {"riviere": "rivière Étamamiou", "zone": "Q9", "lat": 50.3836213839, "lon": -59.9898368418, "seuil_optimal": 3.872, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 165.0, "pct": null, "pct5": null}, {"riviere": "rivière à la Baleine", "zone": "Q11", "lat": 57.8885555556, "lon": -67.6000833333, "seuil_optimal": null, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 237.0, "pct": null, "pct5": null}, {"riviere": "ruisseau au Saumon", "zone": "Q9", "lat": 45.6216956046, "lon": -71.3928365793, "seuil_optimal": 0.251, "oeufs_millions": null, "mont_total": null, "repro_total": null, "jours_peche": 7.0, "pct": null, "pct5": null}];
+
+function couleur(p){
+  if (p === null) return '#9e9e9e';
+  if (p >= 100) return '#1a9850';
+  if (p >= 60)  return '#a6d96a';
+  if (p >= 30)  return '#fdae61';
+  return '#d73027';
+}
+function rayon(m){ return m ? Math.max(6, Math.min(20, Math.sqrt(m)/3)) : 6; }
+function n(v, d){ return (v === null || v === undefined) ? '\u2014' : v.toFixed(d); }
+
+var map = L.map('map').setView([49.0, -66.0], 6);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap', maxZoom: 14
+}).addTo(map);
+
+var hydro = L.tileLayer.wms('https://servicescarto.mrnf.gouv.qc.ca/pes/services/Territoire/GRHQ_WMS/MapServer/WMSServer', {
+  layers: '1', format: 'image/png', transparent: true,
+  version: '1.3.0', attribution: 'GRHQ / MRNF', opacity: 0.75
+});
+
+RIV.forEach(function(r){
+  var m = L.circleMarker([r.lat, r.lon], {
+    radius: rayon(r.mont_total), fillColor: couleur(r.pct),
+    color: '#222', weight: 1, fillOpacity: 0.82
+  }).addTo(map);
+  m.bindPopup(
+    '<div class="popup"><h3>' + r.riviere + '</h3><table>' +
+    '<tr><td>Zone</td><td>' + (r.zone || '\u2014') + '</td></tr>' +
+    '<tr><td>Montaison 2025</td><td>' + n(r.mont_total, 0) + '</td></tr>' +
+    '<tr><td>Reproducteurs</td><td>' + n(r.repro_total, 0) + '</td></tr>' +
+    '<tr><td>\u0152ufs (M)</td><td>' + n(r.oeufs_millions, 2) + '</td></tr>' +
+    '<tr><td>Seuil optimal (M)</td><td>' + n(r.seuil_optimal, 2) + '</td></tr>' +
+    '<tr><td><b>% du seuil 2025</b></td><td><b>' +
+      (r.pct === null ? '\u2014' : r.pct + ' %') + '</b></td></tr>' +
+    '<tr><td>Moyenne 2021-2025</td><td>' +
+      (r.pct5 === null ? '\u2014' : r.pct5 + ' %') + '</td></tr>' +
+    '<tr><td>Jours-peche</td><td>' + n(r.jours_peche, 0) + '</td></tr>' +
+    '</table></div>');
+  m.bindTooltip(r.riviere, {direction: 'top'});
+});
+
+L.control.layers(null, {'R\u00e9seau hydrographique (GRHQ)': hydro},
+                 {collapsed: false}).addTo(map);
+
+var lg = L.control({position: 'bottomright'});
+lg.onAdd = function(){
+  var d = L.DomUtil.create('div', 'legende');
+  d.innerHTML =
+    '<b>% du seuil de conservation (2025)</b>' +
+    '<span class="pastille" style="background:#1a9850"></span>100 % et plus<br>' +
+    '<span class="pastille" style="background:#a6d96a"></span>60 \u2013 99 %<br>' +
+    '<span class="pastille" style="background:#fdae61"></span>30 \u2013 59 %<br>' +
+    '<span class="pastille" style="background:#d73027"></span>moins de 30 %<br>' +
+    '<span class="pastille" style="background:#9e9e9e"></span>sans donn\u00e9e<br>' +
+    '<i>Taille du cercle = montaison 2025</i>';
+  return d;
+};
+lg.addTo(map);
+</script>
+</body>
+</html>
