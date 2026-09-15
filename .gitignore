@@ -7,3 +7,6 @@ volet2/*.sqlite
 volet2/*.json
 volet2/*.html
 debit.db
+volet2/canada/tnl_adult/
+volet2/canada/tnl_smolt/
+volet2/canada/*.db

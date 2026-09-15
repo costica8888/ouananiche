@@ -1,0 +1,6 @@
+Name,Description EN,Nom ,Description FR
+River_Code,Numeric code used for each river,River_Code,Code num‚rique attribu‚ … chaque riviŠre
+Date,Date that the data was collected,Date,Date de collecte des donn‚es
+Large,Salmon with fork length greater than 63 cm,Large,Saumons dont la longueur … la fourche est sup‚rieure … 63 cm
+Grilse,Salmon with fork length less than 63 cm,Grilse,Saumons dont la longueur … la fourche est inf‚rieure … 63 cm
+Unsized,Salmon with no fork length measured,Unsized,Saumons dont la longueur … la fourche n'a pas ‚t‚ mesur‚e
